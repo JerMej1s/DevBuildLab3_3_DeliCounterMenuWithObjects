@@ -16,7 +16,7 @@ namespace Lab3_3_DeliCounterMenuWithObjects
             }
         }
         
-        static void printMenu(Dictionary<string, MenuItem> menu)  // Prints the menu
+        static void printMenu(Dictionary<string, MenuItem> menu)  // Prints the deli menu to the console
         {
             Console.WriteLine("\n=======================================================");
             Console.WriteLine("\n\t\t\tMENU");
@@ -31,7 +31,7 @@ namespace Lab3_3_DeliCounterMenuWithObjects
             Console.WriteLine("\n=======================================================");
         }
 
-        static void askPrintMenu(Dictionary<string, MenuItem> menu)  // Asks user whether to print menu
+        static void askPrintMenu(Dictionary<string, MenuItem> menu)  // Asks user whether to print deli menu
         {
             Console.Write("\nDo you want to see the menu? (y/n) ");
             string userPrintMenu = Console.ReadLine().ToUpper();
@@ -45,8 +45,10 @@ namespace Lab3_3_DeliCounterMenuWithObjects
                     break;
             }
         }
+
         static void Main(string[] args)
         {
+            // Creating deli menu items
             MenuItem item1 = new MenuItem();
             item1.itemName = "CLUB SANDWICH";
             item1.itemPrice = 9.99m;
@@ -72,6 +74,7 @@ namespace Lab3_3_DeliCounterMenuWithObjects
             item5.itemPrice = 2.99m;
             item5.itemQOH = 150;
 
+            // Adding deli menu items to dictionary
             Dictionary<string, MenuItem> menu = new Dictionary<string, MenuItem>();
             menu.Add("CLUB SANDWICH", item1);
             menu.Add("FRENCH DIP", item2);
@@ -79,12 +82,14 @@ namespace Lab3_3_DeliCounterMenuWithObjects
             menu.Add("SOUP OF THE DAY", item4);
             menu.Add("HOUSE CHIPS", item5);
 
+            // Prints welcome message and menu to the console
             Console.WriteLine("\tWelcome to Jeremy's Deli Counter!");
             printMenu(menu);
 
-            bool quit = false;
-            do
+            bool quit = false; // Flips to true when user enters Q to QUIT from main menu
+            do // Loops until !quit
             {
+                // Prints main menu
                 Console.WriteLine("\n\tMAIN MENU");
                 Console.WriteLine("********************************");
                 Console.WriteLine("Enter A to ADD a new menu item.");
@@ -98,7 +103,7 @@ namespace Lab3_3_DeliCounterMenuWithObjects
 
                 switch (userChoice)
                 {
-                    case "A": // Adds a new menu item
+                    case "A": // Adds a new deli menu item
                         Console.WriteLine("\nThis will ADD a new menu item. Please provide the following information (or enter CANCEL to start over):");
                         Console.Write("NAME: ");
                         string newMenuItem = Console.ReadLine().ToUpper();
@@ -144,7 +149,7 @@ namespace Lab3_3_DeliCounterMenuWithObjects
 
                         break;
 
-                    case "R": // Removes a menu item
+                    case "R": // Removes a deli menu item
                         Console.WriteLine("\nThis will REMOVE an item from the menu. Please provide the following information (or enter CANCEL to start over):");
                         Console.Write("NAME of the menu item to REMOVE: ");
                         string removeMenuItem = Console.ReadLine().ToUpper();
@@ -166,8 +171,8 @@ namespace Lab3_3_DeliCounterMenuWithObjects
 
                         break;
 
-                    case "C": // Changes a menu item
-                        Console.WriteLine("\nThis will CHANGE the price and/or QOH of a menu item. Please provide the following information (or enter CANCEL to start over):");
+                    case "C": // Changes a deli menu item (prompts user to change both price and QOH)
+                        Console.WriteLine("\nThis will CHANGE the price and QOH of a menu item. Please provide the following information (or enter CANCEL to start over):");
                         Console.Write("NAME of the menu item to CHANGE: ");
                         string changeMenuItem = Console.ReadLine().ToUpper();
 
@@ -210,7 +215,7 @@ namespace Lab3_3_DeliCounterMenuWithObjects
 
                         break;
 
-                    case "S": // Sells an item
+                    case "S": // Sells an item and updates QOH
                         Console.WriteLine("\nThis will SELL a menu item and update QOH. Please provide the following information (or enter CANCEL to start over):");
                         Console.Write("NAME of the item to SELL: ");
                         string sellItem = Console.ReadLine().ToUpper();
@@ -256,7 +261,7 @@ namespace Lab3_3_DeliCounterMenuWithObjects
 
                         break;
                     
-                    case "V": // Prints menu
+                    case "V": // Prints deli menu
                         printMenu(menu);
                         break;
 
@@ -264,7 +269,7 @@ namespace Lab3_3_DeliCounterMenuWithObjects
                         quit = true;
                         break;
 
-                    default: // Invalid entry
+                    default: // Invalid entry, loops to main menu
                         Console.WriteLine("\nThat's an invalid entry.");
                         break;
                 }
