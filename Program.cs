@@ -82,7 +82,7 @@ namespace Lab3_3_DeliCounterMenuWithObjects
             menu.Add("SOUP OF THE DAY", item4);
             menu.Add("HOUSE CHIPS", item5);
 
-            // Prints welcome message and menu to the console
+            // Prints welcome message and deli menu to the console
             Console.WriteLine("\tWelcome to Jeremy's Deli Counter!");
             printMenu(menu);
 
