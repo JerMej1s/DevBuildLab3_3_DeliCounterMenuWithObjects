@@ -103,29 +103,43 @@ namespace Lab3_3_DeliCounterMenuWithObjects
                         Console.Write("NAME: ");
                         string newMenuItem = Console.ReadLine().ToUpper();
 
-                        if (menu.ContainsKey(newMenuItem))
+                        if (newMenuItem == "CANCEL")
+                        {
+                            break;
+                        }
+                        else if (menu.ContainsKey(newMenuItem))
                         {
                             Console.WriteLine($"\n{newMenuItem} is already on the menu.");
-                        }
-                        else if (newMenuItem == "CANCEL")
-                        {
                             break;
                         }
                         else
                         {
                             Console.Write("PRICE: ");
-                            decimal newPrice = decimal.Parse(Console.ReadLine());
-                            Console.Write("QOH: ");
-                            int newQOH = int.Parse(Console.ReadLine());
+                            bool isDecimal = decimal.TryParse(Console.ReadLine(), out decimal newPrice);
 
-                            MenuItem addMenuItem = new MenuItem();                            
+                            if (!isDecimal)
+                            {
+                                Console.WriteLine("\nThat's an invalid entry.");
+                                break;
+                            }
+
+                            Console.Write("QOH: ");
+                            bool isInt = int.TryParse(Console.ReadLine(), out int newQOH);
+
+                            if (!isInt)
+                            {
+                                Console.WriteLine("\nThat's an invalid entry.");
+                                break;
+                            }
+
+                            MenuItem addMenuItem = new MenuItem();
                             addMenuItem.itemName = newMenuItem;
                             addMenuItem.itemPrice = newPrice;
                             addMenuItem.itemQOH = newQOH;
                             menu.Add(newMenuItem, addMenuItem);
-                            
-                            Console.WriteLine($"\nYou ADDED {addMenuItem.itemName} for ${addMenuItem.itemPrice} with {addMenuItem.itemQOH} on hand to the menu.");
-                            askPrintMenu(menu);
+
+                            Console.WriteLine($"\nYou ADDED {addMenuItem.itemQOH} {addMenuItem.itemName} for ${addMenuItem.itemPrice} to the menu.");
+                            askPrintMenu(menu);                            
                         }
 
                         break;
@@ -139,15 +153,15 @@ namespace Lab3_3_DeliCounterMenuWithObjects
                         {
                             break;
                         }
-                        else if (menu.ContainsKey(removeMenuItem))
+                        else if (!menu.ContainsKey(removeMenuItem))
+                        {
+                            Console.WriteLine($"\n{removeMenuItem} is not on the menu and therefore cannot be removed."); 
+                        }
+                        else
                         {
                             menu.Remove(removeMenuItem);
                             Console.WriteLine($"\nYou REMOVED {removeMenuItem} from the menu");
                             askPrintMenu(menu);
-                        }
-                        else
-                        {
-                            Console.WriteLine($"\n{removeMenuItem} is not on the menu and therefore cannot be removed.");
                         }
 
                         break;
@@ -161,19 +175,37 @@ namespace Lab3_3_DeliCounterMenuWithObjects
                         {
                             break;
                         }
-                        else if (menu.ContainsKey(changeMenuItem))
+                        else if (!menu.ContainsKey(changeMenuItem))
                         {
-                            Console.WriteLine($"The current price for {menu[changeMenuItem].itemName} is ${menu[changeMenuItem].itemPrice}.");
-                            Console.Write("New price: ");
-                            menu[changeMenuItem].itemPrice = decimal.Parse(Console.ReadLine());
-                            Console.Write("QOH: ");
-                            menu[changeMenuItem].itemQOH = int.Parse(Console.ReadLine());
-                            Console.WriteLine($"\nYou CHANGED the price of {menu[changeMenuItem].itemName} to ${menu[changeMenuItem].itemPrice} and QOH to {menu[changeMenuItem].itemQOH}.");
-                            askPrintMenu(menu);
+                            Console.WriteLine($"\n{changeMenuItem} is not on the menu and therefore cannot be changed.");
+                            break;
                         }
                         else
                         {
-                            Console.WriteLine($"\n{changeMenuItem} is not on the menu and therefore cannot be changed.");
+                            Console.WriteLine($"The current price for {menu[changeMenuItem].itemName} is ${menu[changeMenuItem].itemPrice}.");
+                            Console.Write("New price: ");
+                            bool isDecimal = decimal.TryParse(Console.ReadLine(), out decimal changePrice);
+
+                            if (!isDecimal)
+                            {
+                                Console.WriteLine("\nThat's an invalid entry.");
+                                break;
+                            }
+
+                            Console.Write("QOH: ");
+                            bool isInt = int.TryParse(Console.ReadLine(), out int changeQOH);
+
+                            if (!isInt)
+                            {
+                                Console.WriteLine("\nThat's an invalid entry.");
+                                break;
+                            }
+
+                            menu[changeMenuItem].itemPrice = changePrice;
+                            menu[changeMenuItem].itemQOH = changeQOH;
+
+                            Console.WriteLine($"\nYou CHANGED the price of {menu[changeMenuItem].itemName} to ${menu[changeMenuItem].itemPrice} and QOH to {menu[changeMenuItem].itemQOH}.");
+                            askPrintMenu(menu);
                         }
 
                         break;
@@ -187,19 +219,24 @@ namespace Lab3_3_DeliCounterMenuWithObjects
                         {
                             break;
                         }
-                        else if (menu.ContainsKey(sellItem))
+                        else if (!menu.ContainsKey(sellItem))
+                        {
+                            Console.WriteLine($"\n{sellItem} is not on the menu and therefore cannot be sold.");
+                            break;
+                        }
+                        else
                         {
                             Console.WriteLine($"There is/are {menu[sellItem].itemQOH} {menu[sellItem].itemName} available for sale.");
                             Console.Write("QUANTITY to SELL: ");
-                            int numSell = int.Parse(Console.ReadLine());
+                            bool isInt = int.TryParse(Console.ReadLine(), out int numSell);
 
-                            if (numSell >= 0 && numSell <= menu[sellItem].itemQOH)
+                            if (!isInt)
                             {
-                                menu[sellItem].Sell(numSell);
-                                Console.WriteLine($"\n{numSell} {menu[sellItem].itemName} have been removed from inventory and {menu[sellItem].itemQOH} is/are available to sell.");
-                                askPrintMenu(menu);
+                                Console.WriteLine("\nThat's an invalid entry.");
+                                break;
                             }
-                            else if (numSell < 0)
+
+                            if (numSell < 0)
                             {
                                 Console.WriteLine("\nYou're trying to sell a negative number of items.");
                                 break;
@@ -209,7 +246,14 @@ namespace Lab3_3_DeliCounterMenuWithObjects
                                 Console.WriteLine("\nYou're trying to sell more than is in inventory.");
                                 break;
                             }
+                            else
+                            {
+                                menu[sellItem].Sell(numSell);
+                                Console.WriteLine($"\n{numSell} {menu[sellItem].itemName} have been removed from inventory and {menu[sellItem].itemQOH} is/are available to sell.");
+                                askPrintMenu(menu);
+                            }
                         }
+
                         break;
                     
                     case "V": // Prints menu
